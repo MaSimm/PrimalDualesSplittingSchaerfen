@@ -13,6 +13,7 @@ function k(p,q,r,s)
 function disk_falt(u, r, s)
 	n_d = size(u,1)
 	m_d = size(u,2)
+	h = 1/(n_d*m_d)
 	A = zeros((n_d-2*r, m_d-2*s))
 
 	for i = 1:n_d-2*r
@@ -36,14 +37,15 @@ function disk_falt(u, r, s)
 function disk_falt_adj(w,r,s)
 	n_a = size(w,1)
 	m_a = size(w,2)
+	h = 1/((n_a + 2*r)*(m_a + 2*s))
 	A = zeros((n_a + 2*r, m_a + 2*s))
 	
 	for i = 1:n_a+2*r
 	for j = 1:m_a+2*s
 		a = 0
-		for n = max(0,i-2*r):min(i, n_a)
-		for m = max(0,j-2*s):min(j, m_a)
-			a = a + w[n, m]*k(n-i-r,m-j-s)			
+		for n = max(1,i-2*r):min(i, n_a)
+		for m = max(1,j-2*s):min(j, m_a)
+			a = a + w[n, m]*k(n-i+r,m-j+s,r,s)			
 		end
 		end
 		a = h*a
