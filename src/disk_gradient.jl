@@ -24,7 +24,7 @@ function disk_ab_v(u,k)
 	elseif k == 2
 
 		for i = 1:n
-			for i = 1:m
+			for j = 1:m
 
 				if j < m
 					v[i, j] = (u[i, j+1] - u[i,j])/h
@@ -42,8 +42,9 @@ function disk_ab_v(u,k)
 
 	return v
 
-	end
+end
 
 
 function disk_grad(u)
 	return cat(disk_ab_v(u,1), disk_ab_v(u,2), dims=3)
+end

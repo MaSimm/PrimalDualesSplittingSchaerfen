@@ -17,21 +17,21 @@ function disk_ab_r(u,k)
 				elseif i < n
 					v[i, j] = (u[i, j] - u[i-1,j])/h
 				else
-					v[i, j] = -u[N-1,j]/h
+					v[i, j] = -u[n-1,j]/h
 				end
 			end
 		end
 	elseif k == 2
 
 		for i = 1:n
-			for i = 1:m
+			for j = 1:m
 				
 				if j == 1
 					v[i,j] = u[i,j]/h
 				elseif j < m
 					v[i, j] = (u[i, j] - u[i,j-1])/h
 				else
-					v[i, j] = -u[i,M-1]/h
+					v[i, j] = -u[i,m-1]/h
 				end
 
 
@@ -44,9 +44,10 @@ function disk_ab_r(u,k)
 
 	return v
 
-	end
+end
 
 
 function disk_div(u)
 	return disk_ab_r(u[:,:,1],1) + disk_ab_r(u[:,:,2],2)
+end
 
