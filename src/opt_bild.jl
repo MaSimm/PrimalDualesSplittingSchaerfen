@@ -20,6 +20,8 @@ function bild_schaerfer(bild::Array{Float64,2}, alpha::Float64, r::Int, s::Int)
 	tau = 1/(n*m*sqrt(8)+1)
 	sigma = 1/(n*m*sqrt(8)+1)
 
+	funkwert = 100
+
 	try
 
 		while true
@@ -33,12 +35,15 @@ function bild_schaerfer(bild::Array{Float64,2}, alpha::Float64, r::Int, s::Int)
 			zk2 = alpha*(zk + sigma*disk_grad(xk3))/max(alpha, m_norm2_3(zk + sigma*disk_grad(xk3)))
 
 			if (m_norm2_2(xk2 - xk) < 1e-14 || m_norm2_2(yk2 - yk) < 1e-14 || m_norm2_3(zk2 - zk) <1e-14) && i > 20
-				xk = xk3
+				xk = xk2
 				yk = yk2
 				zk = zk2
 				break
 			else
+			#Wert:
+			funkwert = 0.5*m_norm2_2(disk_falt(xk2,r,s) - bild)^2 + alpha*total_var(xk2)
 			println("x Differenz: ", m_norm2_2(xk2 - xk), " y Differenz: ", m_norm2_2(yk2 - yk)," z Differenz: ", m_norm2_3(zk2 - zk))
+			println("Funktionswert: ", funkwert)
 			end
 
 			xk = xk3
@@ -60,10 +65,23 @@ function bild_schaerfer(bild::Array{Float64,2}, alpha::Float64, r::Int, s::Int)
 end
 
 
+function m_norm2_1(x::Array{Float64,1})
+	n = size(x,1)
+	h = 1/sqrt(n)
+	
+	a = 0
+	for i = 1:n
+		a = a + x[i]^2
+	end
+	#a = h * sqrt(a)
+	a = sqrt(h*a)
+	return a
+end
+
 function m_norm2_2(x::Array{Float64,2})
 	n = size(x,1)
 	m = size(x,2)
-	h = 1/(n*m)
+	h = 1/sqrt(n*m)
 	
 	a = 0
 	for i = 1:n
@@ -80,7 +98,7 @@ function m_norm2_3(x::Array{Float64,3})
 	n = size(x,1)
 	m = size(x,2)
 	q = size(x,3)
-	h = 1/(n*m*q)
+	h = 1/sqrt(n*m*q)
 	
 	a = 0
 	for i = 1:n
@@ -93,5 +111,22 @@ function m_norm2_3(x::Array{Float64,3})
 	a = h * sqrt(a)
 	#a = sqrt(h*a)
 	return a
+end
+
+function total_var(u::Array{Float64,2})
+	n = size(u,1)
+	m  = size(u,2)
+	h = 1/(n*m)
+	grad_u = disk_grad(u)
+
+	a = 0
+	for i = 1:n
+		for j = 1:m
+			a = a + m_norm2_1(grad_u[i, j,:])
+		end
+	end
+	a = h^2 * sqrt(a)
+	return a
+
 end
 
