@@ -33,7 +33,7 @@ function bild_schaerfer(bild::Array{Float64,2}, alpha::Float64, r::Int, s::Int)
 			zk2 = alpha*(zk + sigma*disk_grad(xk3))/max(alpha, m_norm2_3(zk + sigma*disk_grad(xk3)))
 
 			if (m_norm2_2(xk2 - xk) < 1e-14 || m_norm2_2(yk2 - yk) < 1e-14 || m_norm2_3(zk2 - zk) <1e-14) && i > 20
-				xk = xk2
+				xk = xk3
 				yk = yk2
 				zk = zk2
 				break
@@ -41,7 +41,7 @@ function bild_schaerfer(bild::Array{Float64,2}, alpha::Float64, r::Int, s::Int)
 			println("x Differenz: ", m_norm2_2(xk2 - xk), " y Differenz: ", m_norm2_2(yk2 - yk)," z Differenz: ", m_norm2_3(zk2 - zk))
 			end
 
-			xk = xk2
+			xk = xk3
 			yk = yk2
 			zk = zk2
 		end
@@ -53,7 +53,7 @@ function bild_schaerfer(bild::Array{Float64,2}, alpha::Float64, r::Int, s::Int)
 		if isa(err, InterruptException)
 			return xk
 		else
-			throw err
+			throw(err)
 		end
 	end
 	
