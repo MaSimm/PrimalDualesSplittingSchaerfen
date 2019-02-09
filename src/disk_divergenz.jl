@@ -1,11 +1,11 @@
 
 
-function disk_ab_r(u,k)
+function disk_ab_r(u::Array{Float64,2}, k::Int)
 	n = size(u,1)
 	m = size(u,2)
 	h = 1/(n*m)
 
-	v = copy(u)
+	v = zeros((n,m))
 
 	if k == 1
 
@@ -47,7 +47,7 @@ function disk_ab_r(u,k)
 end
 
 
-function disk_div(u)
+function disk_div(u::Array{Float64,3})
 	return disk_ab_r(u[:,:,1],1) + disk_ab_r(u[:,:,2],2)
 end
 

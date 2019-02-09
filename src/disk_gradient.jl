@@ -1,13 +1,11 @@
 
 
-function disk_ab_v(u,k)
-	#n=length1
+function disk_ab_v(u::Array{Float64,2}, k)
 	n = size(u,1)
-	#m=length2
 	m = size(u,2)
 	h = 1/(n*m)
 
-	v = copy(u)
+	v = zeros((n,m))
 
 	if k == 1
 
@@ -45,6 +43,6 @@ function disk_ab_v(u,k)
 end
 
 
-function disk_grad(u)
+function disk_grad(u::Array{Float64,2})
 	return cat(disk_ab_v(u,1), disk_ab_v(u,2), dims=3)
 end
