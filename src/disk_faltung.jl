@@ -1,17 +1,27 @@
 
 
-function k(p,q,r,s)
+function konst_k(h,p,q,r,s)
 
-	#if p^2/r^2 + q^2/s^2 <= 1
+	return h
+	#return 1
+
+end
+
+function kreis_k(h,p,q,r,s)
+
+	if p^2/r^2 + q^2/s^2 <= 1
+		return h
 	#	return 1
-	#else
-	#	return 0
-	#end
-	return 1
-
+	else
+		return 0
 	end
 
-function disk_falt(u::Array{Float64,2}, r::Int, s::Int)
+end
+
+
+
+
+function disk_falt(u::Array{Float64,2}, r::Int, s::Int, k::Function)
 	n_d = size(u,1)
 	m_d = size(u,2)
 	h = 1/((2*r+1)*(2*s+1))
@@ -23,19 +33,19 @@ function disk_falt(u::Array{Float64,2}, r::Int, s::Int)
 
 			for n = i-r:i+r
 			for m = j-s:j+s
-				a = a + u[n+r, m+s]*k(i-n,j-m,r,s)
+				a = a + u[n+r, m+s]*k(h,i-n,j-m,r,s)
 			end
 			end
-			a = h*a
+			#a = h*a
 			A[i,j] = a
 
 		end
 	end
 	
 	return A
-	end
+end
 
-function disk_falt_adj(w::Array{Float64,2}, r::Int, s::Int)
+function disk_falt_adj(w::Array{Float64,2}, r::Int, s::Int, k::Function)
 	n_a = size(w,1)
 	m_a = size(w,2)
 	h = 1/((2*r+1)* (2*s+1))
@@ -46,10 +56,10 @@ function disk_falt_adj(w::Array{Float64,2}, r::Int, s::Int)
 		a = 0
 		for n = max(1,i-2*r):min(i, n_a)
 		for m = max(1,j-2*s):min(j, m_a)
-			a = a + w[n, m]*k(n-i+r,m-j+s,r,s)			
+			a = a + w[n, m]*k(h,n-i+r,m-j+s,r,s)			
 		end
 		end
-		a = h*a
+		#a = h*a
 		A[i,j] = a
 	end
 	end
@@ -73,17 +83,17 @@ function dual_paarung(u::Array{Float64,2}, w::Array{Float64,2})
 
 end
 
-function teste_adj_faltung(n_wert,m_wertr_wert,s_wert)
+function teste_adj_faltung(n_wert,m_wert,r_wert,s_wert, k)
 	f = 0
-	for r=1:15
+	for r=1:r_wert
 		println("r: ",r)
-		for s=5:10
-			for n=70:80
-				for m=75:85
+		for s=1:s_wert
+			for n = (n_wert-10):n_wert
+				for m = (m_wert-10):m_wert
 				u = rand(Float64,(n,m))
 				w = rand(Float64,(n-2*r,m-2*s))
-				res1 = dual_paarung(w,  disk_falt(u,r,s))
-				res2 = dual_paarung(disk_falt_adj(w,r,s),u)
+				res1 = dual_paarung(w,  disk_falt(u,r,s,k))
+				res2 = dual_paarung(disk_falt_adj(w,r,s,k),u)
 				if abs(res1-res2) > 1e-4
 					println("!Fehler: ", res1, ", ", res2)
 					f = f+1

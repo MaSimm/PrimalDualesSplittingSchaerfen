@@ -4,7 +4,7 @@ include("disk_faltung.jl")
 include("disk_divergenz.jl")
 include("disk_gradient.jl")
 
-function bild_schaerfer(bild::Array{Float64,2}, alpha::Float64, r::Int, s::Int)
+function bild_schaerfer(bild::Array{Float64,2}, alpha::Float64, r::Int, s::Int, k::Function)
 	i=0
 
 	n_a = size(bild,1)
@@ -13,42 +13,42 @@ function bild_schaerfer(bild::Array{Float64,2}, alpha::Float64, r::Int, s::Int)
 	n = n_a + 2*r
 	m = m_a + 2*s
 
-	xk = 0.5*ones((n,m))
-	yk = 0.5*ones((n_a,m_a))
-	zk = 0.5*ones((n,m,2))
+	xk = embed_image(bild,r,s)
+	y1k = zeros((n_a,m_a))
+	y2k = zeros((n,m,2))
 
 	tau = 1/(n*m*sqrt(8)+1)
-	sigma = 1/(n*m*sqrt(8)+1)
+	sigma = (1/(n*m*sqrt(8)+1))
 
 	funkwert = 100
 
 	try
 
 		while true
-			i = i +1
+			i = i + 1
 			println("Schritt: ",i)
 
-			xk2 = xk - tau*(disk_falt_adj(yk,r,s) - disk_div(zk))
+			xk2 = xk - tau*(disk_falt_adj(y1k,r,s,k) - disk_div(y2k))
 			xk3 = 2*xk2 - xk
 			
-			yk2 = (1/(1+sigma))*(yk + sigma*disk_falt(xk3,r,s) - sigma*bild)
-			zk2 = alpha*(zk + sigma*disk_grad(xk3))/max(alpha, m_norm2_3(zk + sigma*disk_grad(xk3)))
+			y1k2 = (1/(1+sigma))*(y1k + sigma*disk_falt(xk3,r,s,k) - sigma*bild)
+			y2k2 = alpha*(y2k + sigma*disk_grad(xk3))/max(alpha, m_norm2_3(y2k + sigma*disk_grad(xk3)))
 
-			if (m_norm2_2(xk2 - xk) < 1e-14 || m_norm2_2(yk2 - yk) < 1e-14 || m_norm2_3(zk2 - zk) <1e-14) && i > 20
+			if (m_norm2_2(xk2 - xk) < 1e-14 || m_norm2_2(y1k2 - y1k) < 1e-14 || m_norm2_3(y2k2 - y2k) <1e-14) && i > 20
 				xk = xk2
-				yk = yk2
-				zk = zk2
+				y1k = y1k2
+				y2k = y2k2
 				break
 			else
-			#Wert:
-			funkwert = 0.5*m_norm2_2(disk_falt(xk2,r,s) - bild)^2 + alpha*total_var(xk2)
-			println("x Differenz: ", m_norm2_2(xk2 - xk), " y Differenz: ", m_norm2_2(yk2 - yk)," z Differenz: ", m_norm2_3(zk2 - zk))
-			println("Funktionswert: ", funkwert)
+				#Wert:
+				funkwert = 0.5*m_norm2_2(disk_falt(xk2,r,s,k) - bild)^2 + alpha*total_var(xk2)
+				println("x Differenz: ", m_norm2_2(xk2 - xk), ", y Differenz: ", m_norm2_2(y1k2 - y1k),", z Differenz: ", m_norm2_3(y2k2 - y2k))
+				println("Funktionswert: ", funkwert)
 			end
 
 			xk = xk3
-			yk = yk2
-			zk = zk2
+			y1k = y1k2
+			y2k = y2k2
 		end
 
 		println("Schritt: ", i, " liefert das Resultat")
@@ -62,6 +62,25 @@ function bild_schaerfer(bild::Array{Float64,2}, alpha::Float64, r::Int, s::Int)
 		end
 	end
 	
+end
+
+
+function embed_image(inp::Array{Float64,2},r::Int, s::Int)
+	n1 = size(inp,1)
+	m1 = size(inp,2)
+
+	n = n1 + 2*r
+	m = m1 + 2*s
+
+	emb_out = zeros((n,m))
+
+	for i = 1:n1
+		for j = 1:m1
+			emb_out[i+r,j+s] = inp[i,j]
+		end
+	end
+
+	return emb_out
 end
 
 
@@ -116,7 +135,7 @@ end
 function total_var(u::Array{Float64,2})
 	n = size(u,1)
 	m  = size(u,2)
-	h = 1/(n*m)
+	h = 1/sqrt(n*m)
 	grad_u = disk_grad(u)
 
 	a = 0
