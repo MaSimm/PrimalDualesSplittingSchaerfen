@@ -13,9 +13,13 @@ function bild_schaerfer(bild::Array{Float64,2}, alpha::Float64, r::Int, s::Int)
 	n = n_a + 2*r
 	m = m_a + 2*s
 
-	xk = 0.5*ones((n,m))
-	yk = 0.5*ones((n_a,m_a))
-	zk = 0.5*ones((n,m,2))
+	#xk = 0.5*ones((n,m))
+	#yk = 0.5*ones((n_a,m_a))
+	#zk = 0.5*ones((n,m,2))
+
+	xk = disk_falt_adj(bild,r,s)
+	yk = copy(bild)
+	zk = disk_grad(xk)
 
 	tau = 1/(n*m*sqrt(8)+1)
 	sigma = 1/(n*m*sqrt(8)+1)
