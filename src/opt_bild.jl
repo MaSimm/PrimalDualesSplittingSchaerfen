@@ -4,9 +4,8 @@ include("disk_faltung.jl")
 include("disk_divergenz.jl")
 include("disk_gradient.jl")
 
-function bild_schaerfer(bild::Array{Float64,2}, alpha::Float64, r::Int, s::Int, k::Function)
-	i=0
-
+function bild_schaerfer(bild::Array{Float64,2}, alpha::Float64, r::Int, s::Int, k::Function, it=10000::Int)
+	
 	n_a = size(bild,1)
 	m_a = size(bild,2)
 
@@ -22,11 +21,12 @@ function bild_schaerfer(bild::Array{Float64,2}, alpha::Float64, r::Int, s::Int, 
 
 	funkwert = 100
 
+	print("<")
+
 	try
 
-		while true
-			i = i + 1
-			println("Schritt: ",i)
+		for i = 1:it
+			print("-")
 
 			xk2 = xk - tau*(disk_falt_adj(y1k,r,s,k) - disk_div(y2k))
 			xk3 = 2*xk2 - xk
@@ -34,24 +34,19 @@ function bild_schaerfer(bild::Array{Float64,2}, alpha::Float64, r::Int, s::Int, 
 			y1k2 = (1/(1+sigma))*(y1k + sigma*disk_falt(xk3,r,s,k) - sigma*bild)
 			y2k2 = alpha*(y2k + sigma*disk_grad(xk3))/max(alpha, m_norm2_3(y2k + sigma*disk_grad(xk3)))
 
-			if (m_norm2_2(xk2 - xk) < 1e-14 || m_norm2_2(y1k2 - y1k) < 1e-14 || m_norm2_3(y2k2 - y2k) <1e-14) && i > 20
-				xk = xk2
-				y1k = y1k2
-				y2k = y2k2
-				break
-			else
-				#Wert:
-				funkwert = 0.5*m_norm2_2(disk_falt(xk2,r,s,k) - bild)^2 + alpha*total_var(xk2)
-				println("x Differenz: ", m_norm2_2(xk2 - xk), ", y Differenz: ", m_norm2_2(y1k2 - y1k),", z Differenz: ", m_norm2_3(y2k2 - y2k))
-				println("Funktionswert: ", funkwert)
-			end
-
+			#Wert:
+			#funkwert = 0.5*m_norm2_2(disk_falt(xk2,r,s,k) - bild)^2 + alpha*total_var(xk2)
+			#println("x Differenz: ", m_norm2_2(xk2 - xk), ", y Differenz: ", m_norm2_2(y1k2 - y1k),", z Differenz: ", m_norm2_3(y2k2 - y2k))
+			#println("Funktionswert: ", funkwert)
+			
 			xk = xk3
 			y1k = y1k2
 			y2k = y2k2
 		end
 
-		println("Schritt: ", i, " liefert das Resultat")
+		#println("Schritt: ", i, " liefert das Resultat")
+		print(">\n")
+		
 	
 		return xk
 	catch err
