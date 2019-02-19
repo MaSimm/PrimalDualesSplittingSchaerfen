@@ -26,7 +26,8 @@ function bild_schaerfer(bild::Array{Float64,2}, alpha::Float64, r::Int, s::Int, 
 	try
 
 		for i = 1:it
-			if i%10 == 0
+
+			if i % 10 == 0
 				print("-")
 			end
 
@@ -50,6 +51,68 @@ function bild_schaerfer(bild::Array{Float64,2}, alpha::Float64, r::Int, s::Int, 
 		print(">\n")
 		
 	
+		return xk
+	catch err
+		if isa(err, InterruptException)
+			return xk
+		else
+			throw(err)
+		end
+	end
+	
+end
+
+function perf_bild_schaerfer(bild::Array{Float64,2}, alpha::Float64, r::Int, s::Int, k::Function, it=10000::Int)
+	
+	n_a = size(bild,1)
+	m_a = size(bild,2)
+
+	n = n_a + 2*r
+	m = m_a + 2*s
+
+	xk = embed_image(bild,r,s)
+	y1k = zeros((n_a,m_a))
+	y2k = zeros((n,m,2))
+
+	div_y2k = zeros((n,m))
+	grad_xk3 = zeros((n,m,2))
+
+	falt_adj_y1k = zeros((n,m))
+
+	falt_xk3 = zeros((n_a, m_a))
+
+	tau = 1/(n*m*sqrt(8)+1)
+	sigma = (1/(n*m*sqrt(8)+1))
+
+	funkwert = 100
+
+	print("<")
+
+	try
+
+		for i = 1:it
+			if i % 10 == 0
+				print("-")
+			end
+
+			perf_disk_div(y2k, div_y2k)
+			perf_disk_falt_adj(y1k,r,s,k, falt_adj_y1k)
+			xk2 = xk - tau*(falt_adj_y1k - div_y2k)
+			xk3 = 2*xk2 - xk
+
+			perf_disk_falt(xk3,r,s,k, falt_xk3)
+			y1k2 = (1/(1+sigma))*(y1k + sigma*falt_xk3 - sigma*bild)
+			
+			perf_disk_grad(xk3, grad_xk3)
+			y2k2 = alpha*(y2k + sigma*grad_xk3)/max(alpha, m_norm2_3(y2k + sigma*grad_xk3))
+
+			xk = xk3
+			y1k = y1k2
+			y2k = y2k2
+		end
+
+		print(">\n")
+			
 		return xk
 	catch err
 		if isa(err, InterruptException)
