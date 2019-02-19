@@ -6,14 +6,6 @@ using Images
 include("opt_bild.jl")
 include("img_load.jl")
 
-#bild = load_img("../exp_bilder/test_bild1.JPG")
-
-#bild_falt = disk_falt(bild, 3,3, kreis_k)
-
-#output = bild_schaerfer(bild_falt, 1.0,3,3,kreis_k)
-
-#save("../exp_bilder/output_kreis.png", output)
-
 file = "exp_bilder/test_bild1.JPG"
 
 output = "output.png"
@@ -27,7 +19,9 @@ alpha = 1.0
 iterationen = 10000
 
 
-for i = 1:size(ARGS,1)
+
+
+for i in 1:size(ARGS,1)
 
 	if ARGS[i] == "--help"
 
@@ -36,17 +30,15 @@ for i = 1:size(ARGS,1)
 		println("haben.")
 
 	elseif ARGS[i] == "--input" || ARGS[i] == "--i"
-		
-		global file
 
+		global file
+		
 		file = ARGS[i+1]
 
 		i = i+2
 		continue
 
 	elseif ARGS[i] == "--output" || ARGS[i] == "--o"
-
-		global output
 		
 		output = ARGS[i+1]
 
@@ -81,7 +73,7 @@ for i = 1:size(ARGS,1)
 		continue
 
 	elseif ARGS[i] == "--it" || ARGS[i] == "--iterations" || ARGS[i] == "--iteration" || ARGS[i] == "--iter"
-		
+
 		global iterationen
 
 		iterationen = parse(Int,ARGS[i+1])
@@ -102,7 +94,7 @@ println("input: ", file, ", alpha: ", alpha, ", r: ", r, ", s: ", s, ", it: ", i
 
 a = load_img(file)
 
-b = bild_schaerfer(a, alpha, r, s, kreis_k, iterationen)
+b = perf_bild_schaerfer(a, alpha, r, s, kreis_k, iterationen)
 
 c = map(clamp01nan, b)
 
