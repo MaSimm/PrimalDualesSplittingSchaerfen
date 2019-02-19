@@ -71,18 +71,18 @@ function perf_disk_falt(u::Array{Float64,2}, r::Int, s::Int, k::Function, A::Arr
 	n_d = size(u,1)
 	m_d = size(u,2)
 	h = 1/((2*r+1)*(2*s+1))
-	#A = zeros((n_d-2*r, m_d-2*s))
+	B = zeros((2*r+1,2*s+1))
 
 	for i = 1:n_d-2*r
 		for j = 1:m_d-2*s
-			a = 0
 
-			for n = i-r:i+r
-			for m = j-s:j+s
-				@fastmath @inbounds a = a + u[n+r, m+s]*k(h,i-n,j-m,r,s)
+			@simd for a = 0:((2*r+1)*(2*s+1)-1)
+				m = (a % (2*s+1)) +1
+				n = (a ÷ (2*s+1)) +1
+				@fastmath @inbounds B[n, m] = u[n+i-1, m+j-1]*k(h,n-r-1,m-s-1,r,s)
 			end
-			end
-			A[i,j] = a
+
+			@fastmath @inbounds A[i,j] = sum(B)
 
 		end
 	end
@@ -93,7 +93,6 @@ function perf_disk_falt_adj(w::Array{Float64,2}, r::Int, s::Int, k::Function, A:
 	n_a = size(w,1)
 	m_a = size(w,2)
 	h = 1/((2*r+1)* (2*s+1))
-	#A = zeros((n_a + 2*r, m_a + 2*s))
 	
 	for i = 1:n_a+2*r
 	for j = 1:m_a+2*s
@@ -103,7 +102,6 @@ function perf_disk_falt_adj(w::Array{Float64,2}, r::Int, s::Int, k::Function, A:
 			@fastmath @inbounds a = a + w[n, m]*k(h,n-i+r,m-j+s,r,s)			
 		end
 		end
-		#a = h*a
 		A[i,j] = a
 	end
 	end

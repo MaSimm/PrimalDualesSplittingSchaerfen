@@ -112,7 +112,6 @@ function disk_grad(u::Array{Float64,2})
 end
 
 function perf_disk_grad(u::Array{Float64,2}, res_arr::Array{Float64,3})
-	#return cat(perf_disk_ab_v_1(u,res_arr[:,:,1]), perf_disk_ab_v_2(u,res_arr[:,:,2]), dims=3)
 	perf_disk_ab_v_1(u,res_arr)
 	perf_disk_ab_v_2(u,res_arr)
 end

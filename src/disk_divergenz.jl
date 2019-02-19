@@ -47,9 +47,6 @@ end
 
 
 function disk_ab_r_w_p(u::Array{Float64,2}, k::Int)
-#	n = size(u,1)
-#	m = size(u,2)
-#	h = 1/sqrt(n*m)
 
 	v = zeros((n,m))
 
