@@ -1,6 +1,6 @@
 
-using FileIO
-using Images
+#using FileIO
+#using Images
 
 function load_img(bildname)
 	img = load(bildname)

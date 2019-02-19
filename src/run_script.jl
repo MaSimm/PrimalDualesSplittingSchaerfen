@@ -26,10 +26,10 @@ alpha = 1.0
 
 iterationen = 10000
 
+#print("size: ",)
 
 
-
-for i in 1:size(ARGS)
+for i in 1:size(ARGS,1)
 
 	if ARGS[i] == "--help"
 
@@ -42,41 +42,47 @@ for i in 1:size(ARGS)
 		file = ARGS[i+1]
 
 		i = i+2
+		continue
 
 	elseif ARGS[i] == "--output" || ARGS[i] == "--o"
 		
 		output = ARGS[i+1]
 
 		i = i+2
+		continue
 
 	elseif ARGS[i] == "--alpha" || ARGS[i] == "--a"
 		
 		alpha = parse(Float64,ARGS[i+1])
 
 		i = i+2
+		continue
 
 	elseif ARGS[i] == "--vr" || ARGS[i] == "--vertradius" || ARGS[i] == "--vradius"
 
 		r = parse(Int,ARGS[i+1])
 
 		i = i+2
+		continue
 
 	elseif ARGS[i] == "--hr" || ARGS[i] == "--horradius" || ARGS[i] == "--hradius"
 
 		s = parse(Int,ARGS[i+1])
 
 		i = i+1
+		continue
 
-	elseif ARGS[i] == "-it" || ARGS[i] == "--iterations" || ARGS[i] == "--iteration" || ARGS[i] == "--iter"
+	elseif ARGS[i] == "--it" || ARGS[i] == "--iterations" || ARGS[i] == "--iteration" || ARGS[i] == "--iter"
 
 		iterationen = parse(Int,ARGS[i+1])
 
 		i = i+1
+		continue
 
 	else
-		println("Die Kommandozeilen Argumente sollten die Form:\njulia run_script.jl [OPTION1] [OPTIONSARGUMENT1] [OPTION2] [OPTIONSARGUMENT2] ...")
-		println("OPTIONEN:\n --input\n --vertradius\n --horradius\n --iteration")
-		println("haben.")
+		#println("Die Kommandozeilen Argumente sollten die Form:\njulia run_script.jl [OPTION1] [OPTIONSARGUMENT1] [OPTION2] [OPTIONSARGUMENT2] ...")
+		#println("OPTIONEN:\n --input\n --vertradius\n --horradius\n --iteration")
+		#println("haben.")
 	end
 
 
@@ -84,6 +90,8 @@ end
 
 a = load_img(file)
 
-b = bild_schaerfer(a, alpha, r, s, kreis_k, it=iterationen)
+b = bild_schaerfer(a, alpha, r, s, kreis_k, iterationen)
 
-save(output, b)
+c = map(clamp01nan, b)
+
+save(output, c)

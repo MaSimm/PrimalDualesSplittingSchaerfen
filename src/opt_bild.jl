@@ -26,7 +26,9 @@ function bild_schaerfer(bild::Array{Float64,2}, alpha::Float64, r::Int, s::Int, 
 	try
 
 		for i = 1:it
-			print("-")
+			if i%10 == 0
+				print("-")
+			end
 
 			xk2 = xk - tau*(disk_falt_adj(y1k,r,s,k) - disk_div(y2k))
 			xk3 = 2*xk2 - xk
