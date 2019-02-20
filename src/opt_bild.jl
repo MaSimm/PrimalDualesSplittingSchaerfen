@@ -97,18 +97,18 @@ function perf_bild_schaerfer(bild::Array{Float64,2}, alpha::Float64, r::Int, s::
 
 			perf_disk_div(y2k, div_y2k)
 			perf_disk_falt_adj(y1k,r,s,k, falt_adj_y1k)
-			xk2 = xk - tau*(falt_adj_y1k - div_y2k)
-			xk3 = 2*xk2 - xk
+			@fastmath @inbounds xk2 = xk - tau*(falt_adj_y1k - div_y2k)
+			@fastmath @inbounds xk3 = 2*xk2 - xk
 
 			perf_disk_falt(xk3,r,s,k, falt_xk3)
-			y1k2 = (1/(1+sigma))*(y1k + sigma*falt_xk3 - sigma*bild)
+			@fastmath @inbounds y1k2 = (1/(1+sigma))*(y1k + sigma*falt_xk3 - sigma*bild)
 			
 			perf_disk_grad(xk3, grad_xk3)
-			y2k2 = alpha*(y2k + sigma*grad_xk3)/max(alpha, m_norm2_3(y2k + sigma*grad_xk3))
+			@fastmath @inbounds y2k2 = alpha*(y2k + sigma*grad_xk3)/max(alpha, m_norm2_3(y2k + sigma*grad_xk3))
 
-			xk = xk3
-			y1k = y1k2
-			y2k = y2k2
+			@inbounds xk = xk3
+			@inbounds y1k = y1k2
+			@inbounds y2k = y2k2
 		end
 
 		print(">\n")
