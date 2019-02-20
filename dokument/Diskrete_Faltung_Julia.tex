@@ -1,0 +1,149 @@
+%\documentclass[11pt,a4paper,oneside,abstracton]{scrartcl}
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel} %fuer die deutsche Sprache
+\usepackage{tabularx, multirow} %fuer Tabellen
+\usepackage{booktabs}
+\usepackage{tabularx,threeparttable,multicol}
+\usepackage{pgfplots}
+%\usepackage{graphicx, tikz} %Grafiken
+\usepackage{amsmath, amssymb, amsthm} %einige hilfreiche Mathe-Pakete
+\usepackage{mathtools}
+\usepackage{verbatim}
+\usepackage{epstopdf}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{listings}
+%\usepackage{todonotes} %zum Erstellen von To-Do-Listen
+\usepackage{hyperref} %zur Verlinkung, Achtung: immer als letztes Paket laden!
+
+% damit kann man die Seitenrand-Einstellungen  verwalten
+% detaillierte Informationen finden sich in der Dokumentation zu KomaScript
+%\KOMAoptions{BCOR=5mm} % gibt an, wieviel Platz links vom Text ist
+%\KOMAoptions{DIV=13}   % rechnet aus, wieviel Platz der Text auf der Seite bekommt
+
+
+%% Theoremumgebungen, die nuetzlich sein koennten:
+
+
+
+%% Eckige Klammern: Theoreme kriegen vor ihre Zahl 
+% noch die Section-Nummer
+\newtheorem{theorem}{Theorem}[section] 
+% eckige Klammern geben hier an, dass 
+% sich alle Umgebungen hier denselben
+% counter wie 'theorem' teilen
+\newtheorem{lemma}[theorem]{Lemma}              
+\newtheorem{proposition}[theorem]{Satz}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{bemerkung}[theorem]{Bemerkung}
+\newtheorem{beispiel}{Beispiel}
+\newtheorem{algorithmus}[theorem]{Algorithmus}
+\newtheorem{anm}[theorem]{Anmerkung}
+
+
+\newtheoremstyle{case}{}{}{}{}{}{:}{ }{}
+\theoremstyle{case}
+\newtheorem{case}{Fall}
+
+\newcommand*\rfrac[2]{{}^{#1}\!/_{#2}}
+\newcommand{\cunderline}[2]{\textcolor{#1}{\textcolor{black}{#2}}}
+\newsavebox\MBox
+\newcommand\Cline[2][red]{{\sbox\MBox{$#2$}%
+  \rlap{\usebox\MBox}\color{#1}\rule[-1.2\dp\MBox]{\wd\MBox}{0.5pt}}}
+
+\newcommand{\EP}[3]{
+\begin{center}
+{\small 
+\begin{tabularx}{0.97\columnwidth}{ll}
+\toprule
+\multicolumn{2}{c}{\textsc{#1}} \\
+\midrule
+\textbf{Gegeben:}& \parbox[t]{0.78\columnwidth}{#2\vspace*{1mm}} \\%[5mm]
+\textbf{Frage:}& \parbox[t]{0.78\columnwidth}{#3\vspace*{.5mm}} \\ 
+\bottomrule
+\end{tabularx}
+}
+\end{center}
+\medskip
+}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+
+\begin{document}
+%
+%\includegraphics[width=0.7\textwidth]{logo_claim_300dpi_cmyk_200.jpg}
+%
+\title{Das SQP Verfahren}
+%
+\author{Maximilian Simmoteit}
+%
+\date{\today}
+%
+\maketitle
+
+%\pagebreak
+
+%%%%
+%\section*{Abstract}
+%Bei gewichtete Wahlspielen handelt es sich um einfache Spiele, die kompakt darzustellen sind. In dieser Arbeit wird die Berechnungskomplexität der Entscheidung, ob verschiedene Eingriffe in ein Spiel die Macht erhöhen, untersucht.\newline
+%Zu Beginn werden zwei Indices eingeführt, die die ``Macht'' eines Spielers in einem gewichteten Wahlspiel repräsentieren und Eigenschaften dieser untersuchen.\newline
+
+
+%\section{Problem 1) Modellierung als Zylinder}
+
+\section*{Grundannahmen dieser Arbeit}
+
+In dieser Arbeit werden allgemeine Bilder als Funktionen $[0,1]^{2}\rightarrow [0,1]$ aufgefasst. Diskrete Bilder sind dann zweidimensionale Vektoren mit Werten in $[0,1]$. 
+
+
+\section{Das Schärfen von Bildern}
+
+In meinem Projekt habe ich mich damit beschäftigt den Algorithmus zum Schärfen von Bildern als Programm umzusetzen. Die Unschärfe eines Bildes wird hier als Faltung aufgefasst. Für einen Faltungskern $k$ und ein Bild $u$ ist das unscharfe Bild dann $k*u$. Für ein gegebenes unscharfe Bild $f$ ergibt sich daraus für die Optimierung der Minimierungsterm:
+\begin{equation}
+\min_{u\in U}\norm{k*u - f} + \alpha TV(u)
+\end{equation}
+oder für den diskreten Fall
+\begin{equation}
+min_{u\in U}\norm{k*u - f} + \alpha \norm{\lVert \nabla_{h} u \rVert_{2}}_{1}
+\end{equation}
+Zum Finden der optimalen Lösung $u$, kann man die Routine von Chambole-Pock nutzen. Als Eingabe benötigt diese einen Term der Form $\min_{x\in X} F(x) + G(Ax)$. Allerdings wird der Term für ein gefaltetes Bild dem nicht ganz gerecht, da dort auch im ersten Term noch eine Funktion auf die Variable angewandt wird. Deswegen setzt man $F(x) = 0$ und setzt den gesamten Term in $G(Ax)$ ein. Hier setzt man $Au = k*u$ und dementsprechend $A^{*}$ als dessen adjungierte Abbildung. Somit erhält man den folgenden Algorithmus:
+\begin{align*}
+x^{k+1} &= x^{k} - \tau (A^{*}y_{1}^{k} - div y_{2}^{k}) \\
+\bar{x}^{k+1} &= 2\cdot x^{k+1} - x^{k} \\
+y_{1}^{k+1} &= \frac{1}{1+\sigma} (y_{1}^{k} + \sigma\cdot A \bar{x}^{k+1} - \sigma\cdot f) \\
+y{2}^{k+1} &= \frac{\alpha (y_{2}^{k+1} + \sigma \nabla \bar{x}^{k+1} )}{\max\{\alpha, \norm{y_{2}^{k+1} + \sigma \nabla \bar{x}^{k+1} }_{2}\}}
+\end{align*}
+
+
+\section{Umsetzung als Programm}
+Und so wurde dieser Algorithmus als Programm umgesetzt.\newline
+Zuerst betrachten wir, wie die Funktionen der diskreten Ableitung implementiert wurden.
+
+\subsection{Der diskrete Gradient}
+
+\subsection*{Performance Verbesserungen}
+
+\subsection{Die diskrete Divergenz}
+
+\subsection*{Performance Verbesserungen}
+
+\subsection{Die diskrete Faltung}
+
+\subsection*{Performance Verbesserungen}
+
+\subsection{Die Optimierungsschleife}
+
+
+
+% \bibliographystyle{alpha} verwendet Kuerzel aus Autorennamen und Jahreszahl
+% \bibliographystyle{abbrv} verwendet numerische Referenzen
+%\bibliographystyle{abbrv}
+% Hier die *.bib-Datei angegeben, die verwendet werden soll! An dieser Stelle wird
+% jetzt das Literaturverzeichnis erstellt.
+%\bibliography{literatur.bib}
+
+
+\end{document}
