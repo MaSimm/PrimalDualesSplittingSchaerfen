@@ -81,47 +81,37 @@ function perf_bild_schaerfer(bild::Array{Float64,2}, alpha::Float64, r::Int, s::
 
 	falt_xk3 = zeros((n_a, m_a))
 
+	sum_y2k2 = zeros((n,m,2))
+
 	tau = 1/(n*m*sqrt(8)+1)
 	sigma = (1/(n*m*sqrt(8)+1))
 
-	funkwert = 100
-
 	print("<")
 
-	try
-
-		for i = 1:it
-			if i % 10 == 0
-				print("-")
-			end
-
-			perf_disk_div(y2k, div_y2k)
-			perf_disk_falt_adj(y1k,r,s,k, falt_adj_y1k)
-			@fastmath @inbounds xk2 = xk - tau*(falt_adj_y1k - div_y2k)
-			@fastmath @inbounds xk3 = 2*xk2 - xk
-
-			perf_disk_falt(xk3,r,s,k, falt_xk3)
-			@fastmath @inbounds y1k2 = (1/(1+sigma))*(y1k + sigma*falt_xk3 - sigma*bild)
-			
-			perf_disk_grad(xk3, grad_xk3)
-			@fastmath @inbounds y2k2 = alpha*(y2k + sigma*grad_xk3)/max(alpha, m_norm2_3(y2k + sigma*grad_xk3))
-
-			@inbounds xk = xk3
-			@inbounds y1k = y1k2
-			@inbounds y2k = y2k2
+	for i = 1:it
+		if i % 10 == 0
+			print("-")
 		end
+		perf_disk_div(y2k, div_y2k)
+		perf_disk_falt_adj(y1k,r,s,k, falt_adj_y1k)
+		@inbounds xk2 = xk .- tau.*(falt_adj_y1k .- div_y2k)
+		@inbounds xk3 = 2.0 .*xk2 .- xk
 
-		print(">\n")
+		perf_disk_falt(xk3,r,s,k, falt_xk3)
+		@inbounds y1k2 = (1.0 ./(1.0 .+sigma)).*(y1k .+ sigma.*falt_xk3 .- sigma.*bild)
 			
-		return xk
-	catch err
-		if isa(err, InterruptException)
-			return xk
-		else
-			throw(err)
-		end
+		perf_disk_grad(xk3, grad_xk3)
+		@inbounds sum_y2k2 = y2k .+ sigma.*grad_xk3
+		@inbounds y2k2 = alpha.*(sum_y2k2)./max(alpha, m_norm2_3(sum_y2k2))
+
+		@inbounds xk = xk2
+		@inbounds y1k = y1k2
+		@inbounds y2k = y2k2
 	end
-	
+
+	print(">\n")
+			
+	return xk
 end
 
 

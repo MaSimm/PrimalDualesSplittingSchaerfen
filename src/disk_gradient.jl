@@ -72,38 +72,60 @@ function perf_disk_ab_v_1(u::Array{Float64,2},v::Array{Float64,3})
 
 	n = size(u,1)
 	m = size(u,2)
-	M = n*m
+	#M = n*m
 	h = 1/sqrt(n*m)
 
-	@simd for a = 0:M-1
-		j = a % m +1
-		i = a ÷ m +1
+	#@simd for a = 0:M-1
+	#	j = a % m +1
+	#	i = a ÷ m +1
 
-		if i < n
-			@fastmath @inbounds v[i, j, 1] = (u[i+1, j] - u[i,j])/h
-		else
-			@inbounds v[i, j, 1] = 0
+	#	if i < n
+	#		@fastmath @inbounds v[i, j, 1] = (u[i+1, j] - u[i,j])/h
+	#	else
+	#		@inbounds v[i, j, 1] = 0
+	#	end
+	#end
+
+	for i = 1:n
+		for j = 1:m
+			if i < n
+				@inbounds v[i, j, 1] = (u[i+1, j] - u[i,j])/h
+			else
+				@inbounds v[i, j, 1] = 0
+			end
 		end
 	end
+
 end
 
 function perf_disk_ab_v_2(u::Array{Float64,2},v::Array{Float64,3})
 
 	n = size(u,1)
 	m = size(u,2)
-	M = n*m
+	#M = n*m
 	h = 1/sqrt(n*m)
 
-	@simd for a = 0:(M-1)
-		j = (a % m) +1
-		i = (a ÷ m) +1
+	#@simd for a = 0:(M-1)
+	#	j = (a % m) +1
+	#	i = (a ÷ m) +1
+	#	if j < m
+	#		@fastmath @inbounds v[i, j, 2] = (u[i, j+1] - u[i,j])/h
+	#	else
+	#		@inbounds v[i, j, 2] = 0
+	#	end
+	#end
 
-		if j < m
-			@fastmath @inbounds v[i, j, 2] = (u[i, j+1] - u[i,j])/h
-		else
-			@inbounds v[i, j, 2] = 0
+	for i = 1:n
+		for j = 1:m
+			if j < m
+				@inbounds  v[i, j,2] = (u[i, j+1] - u[i,j])/h
+			else
+				@inbounds v[i, j,2] = 0
+			end
 		end
 	end
+
+
 end
 
 
