@@ -74,7 +74,7 @@ function perf_disk_falt(u::Array{Float64,2}, r::Int, s::Int, k::Function, A::Arr
 	h = 1/((2*r+1)*(2*s+1))
 	#B = zeros((2*r+1,2*s+1))
 
-	for i = 1:n_d-2*r
+	@threads for i = 1:n_d-2*r
 		for j = 1:m_d-2*s
 			a = 0
 
@@ -104,7 +104,7 @@ function perf_disk_falt_adj(w::Array{Float64,2}, r::Int, s::Int, k::Function, A:
 	m_a = size(w,2)
 	h = 1/((2*r+1)* (2*s+1))
 	
-	for i = 1:n_a+2*r
+	@threads for i = 1:n_a+2*r
 	for j = 1:m_a+2*s
 		a = 0
 		for n = max(1,i-2*r):min(i, n_a)
