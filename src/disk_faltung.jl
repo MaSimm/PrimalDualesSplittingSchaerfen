@@ -19,7 +19,20 @@ function kreis_k(h,p,q,r,s)
 
 end
 
+function check_number(k::Function, r::Int, s::Int)
+	a = 0
 
+	for i=-r:r
+		for j=-s:s
+			if k(1,i,j,r,s) > 0
+				a = a+1
+			end
+		end
+	end
+
+	return a
+
+end
 
 
 function disk_falt(u::Array{Float64,2}, r::Int, s::Int, k::Function)
@@ -68,7 +81,7 @@ function disk_falt_adj(w::Array{Float64,2}, r::Int, s::Int, k::Function)
 	return A
 end
 
-function perf_disk_falt(u::Array{Float64,2}, r::Int, s::Int, k::Function, A::Array{Float64,2})
+function perf_disk_falt(u::Array{Float64,2}, r::Int, s::Int, k::Function, ret_d_falt_kerns::Float64, A::Array{Float64,2})
 	n_d = size(u,1)
 	m_d = size(u,2)
 	h = 1/((2*r+1)*(2*s+1))
@@ -80,7 +93,7 @@ function perf_disk_falt(u::Array{Float64,2}, r::Int, s::Int, k::Function, A::Arr
 
 			for n = i-r:i+r
 			for m = j-s:j+s
-				@inbounds a = a + u[n+r, m+s]*k(h,i-n,j-m,r,s)
+				@inbounds a = a + u[n+r, m+s]*k(ret_d_falt_kerns,i-n,j-m,r,s)
 			end
 			end
 			@inbounds A[i,j] = a
@@ -99,7 +112,7 @@ function perf_disk_falt(u::Array{Float64,2}, r::Int, s::Int, k::Function, A::Arr
 end
 
 
-function perf_disk_falt_adj(w::Array{Float64,2}, r::Int, s::Int, k::Function, A::Array{Float64,2})
+function perf_disk_falt_adj(w::Array{Float64,2}, r::Int, s::Int, k::Function, ret_d_falt_kerns::Float64, A::Array{Float64,2})
 	n_a = size(w,1)
 	m_a = size(w,2)
 	h = 1/((2*r+1)* (2*s+1))
@@ -109,7 +122,7 @@ function perf_disk_falt_adj(w::Array{Float64,2}, r::Int, s::Int, k::Function, A:
 		a = 0
 		for n = max(1,i-2*r):min(i, n_a)
 		for m = max(1,j-2*s):min(j, m_a)
-			@inbounds a = a + w[n, m]*k(h,n-i+r,m-j+s,r,s)			
+			@inbounds a = a + w[n, m]*k(ret_d_falt_kerns,n-i+r,m-j+s,r,s)			
 		end
 		end
 		@inbounds A[i,j] = a

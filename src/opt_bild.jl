@@ -93,6 +93,8 @@ function perf_bild_schaerfer(bild::Array{Float64,2}, alpha::Float64, r::Int, s::
 	tau = 1/(n*m*sqrt(8)+1)
 	sigma = (1/(n*m*sqrt(8)+1))
 
+	ret_d_falt_kerns = 1/check_number(k,r,s)
+
 	print("<")
 
 	for i = 1:it
@@ -100,11 +102,11 @@ function perf_bild_schaerfer(bild::Array{Float64,2}, alpha::Float64, r::Int, s::
 			print("-")
 		end
 		perf_disk_div(y2k, div_y2k)
-		perf_disk_falt_adj(y1k,r,s,k, falt_adj_y1k)
+		perf_disk_falt_adj(y1k,r,s,k, ret_d_falt_kerns,falt_adj_y1k)
 		@. @inbounds xk2 = xk - tau*(falt_adj_y1k - div_y2k)
 		@. @inbounds xk3 = 2.0 *xk2 - xk
 
-		perf_disk_falt(xk3,r,s,k, falt_xk3)
+		perf_disk_falt(xk3,r,s,k, ret_d_falt_kerns,falt_xk3)
 		@. @inbounds y1k2 = (1.0 /(1.0 +sigma))*(y1k + sigma*falt_xk3 - sigma*bild)
 			
 		perf_disk_grad(xk3, grad_xk3)
