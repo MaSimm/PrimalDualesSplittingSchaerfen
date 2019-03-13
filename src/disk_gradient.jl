@@ -44,8 +44,6 @@ function disk_ab_v(u::Array{Float64,2}, k::Int)
 end
 
 
-
-
 function disk_ab_v_w_perf(u::Array{Float64,2}, k::Int)
 	
 	v = zeros((n,m))
