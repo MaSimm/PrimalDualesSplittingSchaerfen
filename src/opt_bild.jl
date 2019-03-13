@@ -16,9 +16,8 @@ function bild_schaerfer(bild::Array{Float64,2}, alpha::Float64, r::Int, s::Int, 
 	y1k = zeros((n_a,m_a))
 	y2k = zeros((n,m,2))
 
-	tau = 1/(n*m*sqrt(8)+1)
-	sigma = (1/(n*m*sqrt(8)+1))
-
+	tau = 1/(sqrt(n)*sqrt(m)*sqrt(8)+1)
+	sigma = (1/(sqrt(n)*sqrt(m)*sqrt(8)+1))
 	funkwert = 100
 
 	print("<")
@@ -62,7 +61,7 @@ function bild_schaerfer(bild::Array{Float64,2}, alpha::Float64, r::Int, s::Int, 
 	
 end
 
-function perf_bild_schaerfer(bild::Array{Float64,2}, alpha::Float64, r::Int, s::Int, k::Function, it=10000::Int)
+function perf_bild_schaerfer(bild::Array{Float64,2}, alpha::Float64, r::Int, s::Int, k::Function; it=10000, sigma=-1.0, tau=-1.0)
 	
 	n_a = size(bild,1)
 	m_a = size(bild,2)
@@ -90,8 +89,16 @@ function perf_bild_schaerfer(bild::Array{Float64,2}, alpha::Float64, r::Int, s::
 
 	y2k2 = zeros((n,m,2))
 
-	tau = 1/(n*m*sqrt(8)+1)
-	sigma = (1/(n*m*sqrt(8)+1))
+	if sigma < 0 || sigma*tau >= 1/(n*m*8)
+		sigma = (1/(sqrt(n)*sqrt(m)*sqrt(8)+1))
+	end
+	if tau < 0 || sigma*tau >= 1/(n*m*8)
+		tau = 1/(sqrt(n)*sqrt(m)*sqrt(8)+1)
+	end
+	
+
+	#tau = 1/(sqrt(n)*sqrt(m)*sqrt(8)+1)
+	#sigma = (1/(sqrt(n)*sqrt(m)*sqrt(8)+1))
 
 	ret_d_falt_kerns = 1/check_number(k,r,s)
 

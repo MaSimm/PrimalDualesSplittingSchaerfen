@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018/Arch Linux) (preloaded format=pdflatex 2019.2.20)  27 FEB 2019 15:11
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018/Arch Linux) (preloaded format=pdflatex 2019.2.20)  13 MAR 2019 13:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -930,6 +930,26 @@ Overfull \hbox (108.59912pt too wide) in paragraph at lines 183--184
  []
 
 [2]
+Overfull \hbox (70.7992pt too wide) in paragraph at lines 214--215
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (102.29913pt too wide) in paragraph at lines 223--224
+[][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+[3]
+Overfull \hbox (70.7992pt too wide) in paragraph at lines 228--229
+[][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (39.29926pt too wide) in paragraph at lines 231--232
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
 Overfull \hbox (3.1394pt too wide) in paragraph at lines 243--244
 \OT1/cmr/m/n/10 Bei der dis-kre-ten Di-ver-genz wer-den die Er-geb-nis-se dis-k
 re-ten r[]uckw[]arts-Ableitung
@@ -955,7 +975,7 @@ Overfull \hbox (39.29926pt too wide) in paragraph at lines 264--265
 [][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-
+[4]
 Overfull \hbox (14.0993pt too wide) in paragraph at lines 272--273
 [][][][][][][][][][][][][][][][][][][][] 
  []
@@ -970,133 +990,133 @@ Overfull \hbox (39.29926pt too wide) in paragraph at lines 276--277
 [][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-[3]
-Overfull \hbox (83.39917pt too wide) in paragraph at lines 306--307
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+
+Overfull \hbox (152.69904pt too wide) in paragraph at lines 306--307
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-
-Overfull \hbox (83.39917pt too wide) in paragraph at lines 316--317
+[5]
+Overfull \hbox (83.39917pt too wide) in paragraph at lines 315--316
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
 
  []
 
 
-Overfull \hbox (108.59912pt too wide) in paragraph at lines 327--328
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+Overfull \hbox (177.89899pt too wide) in paragraph at lines 326--327
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-[4]
-Overfull \hbox (158.99898pt too wide) in paragraph at lines 337--338
+
+Overfull \hbox (158.99898pt too wide) in paragraph at lines 335--336
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][] 
  []
 
 
-Overfull \hbox (51.89923pt too wide) in paragraph at lines 348--349
+Overfull \hbox (51.89923pt too wide) in paragraph at lines 346--347
 [][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-
-Overfull \hbox (20.39929pt too wide) in paragraph at lines 363--364
+[6]
+Overfull \hbox (20.39929pt too wide) in paragraph at lines 361--362
 [][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (20.39929pt too wide) in paragraph at lines 369--370
+Overfull \hbox (20.39929pt too wide) in paragraph at lines 367--368
 [][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (1.49933pt too wide) in paragraph at lines 370--371
+Overfull \hbox (1.49933pt too wide) in paragraph at lines 368--369
 [][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (51.89923pt too wide) in paragraph at lines 371--372
+Overfull \hbox (51.89923pt too wide) in paragraph at lines 369--370
 [][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (20.39929pt too wide) in paragraph at lines 375--376
+Overfull \hbox (20.39929pt too wide) in paragraph at lines 373--374
 [][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (7.79932pt too wide) in paragraph at lines 376--377
+Overfull \hbox (7.79932pt too wide) in paragraph at lines 374--375
 [][][][][][][][][][][][][][][][][][][][] 
  []
 
-[5]
-Overfull \hbox (32.99927pt too wide) in paragraph at lines 377--378
+
+Overfull \hbox (32.99927pt too wide) in paragraph at lines 375--376
 [][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (20.39929pt too wide) in paragraph at lines 378--379
+Overfull \hbox (20.39929pt too wide) in paragraph at lines 376--377
 [][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-
-Overfull \hbox (102.29913pt too wide) in paragraph at lines 397--398
+(/usr/share/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2018/09/02 1.7 listings language file
+)
+(/usr/share/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2018/09/02 1.7 listings language file
+) [7]
+Overfull \hbox (102.29913pt too wide) in paragraph at lines 406--407
 [][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (26.69926pt too wide) in paragraph at lines 398--399
+Overfull \hbox (26.69926pt too wide) in paragraph at lines 407--408
 [][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (64.4992pt too wide) in paragraph at lines 418--419
+Overfull \hbox (64.4992pt too wide) in paragraph at lines 427--428
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-[6]
-Overfull \hbox (133.79907pt too wide) in paragraph at lines 436--437
+
+Overfull \hbox (133.79907pt too wide) in paragraph at lines 445--446
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (32.99927pt too wide) in paragraph at lines 437--438
+Overfull \hbox (32.99927pt too wide) in paragraph at lines 446--447
 [][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (45.59924pt too wide) in paragraph at lines 438--439
+Overfull \hbox (45.59924pt too wide) in paragraph at lines 447--448
 [][][][][][][][][][][][][][][][] 
  []
 
-(/usr/share/texmf-dist/tex/latex/listings/lstlang1.sty
-File: lstlang1.sty 2018/09/02 1.7 listings language file
-)
-(/usr/share/texmf-dist/tex/latex/listings/lstlang1.sty
-File: lstlang1.sty 2018/09/02 1.7 listings language file
-)
-Overfull \hbox (108.59912pt too wide) in paragraph at lines 451--452
+[8]
+Overfull \hbox (77.09918pt too wide) in paragraph at lines 460--461
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ] 
  []
 
-[7]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 467.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 467.
+[9]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 476.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 476.
  (./Diskrete_Faltung_Julia.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 467.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 467.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 476.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 476.
 Package rerunfilecheck Info: File `Diskrete_Faltung_Julia.out' has not changed.
 
 (rerunfilecheck)             Checksum: F54AA46402D9E4CE6A9E46D91516FF86;402.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 467.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 476.
  ) 
 Here is how much of TeX's memory you used:
- 29379 strings out of 492616
- 679663 string characters out of 6135177
- 1055979 words of memory out of 5000000
- 32584 multiletter control sequences out of 15000+600000
+ 29435 strings out of 492616
+ 680510 string characters out of 6135177
+ 1055440 words of memory out of 5000000
+ 32599 multiletter control sequences out of 15000+600000
  11363 words of font info for 45 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 62i,11n,96p,803b,1838s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 62i,11n,96p,787b,1834s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/
 texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fon
 ts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/publi
@@ -1107,10 +1127,10 @@ t/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texmf-dist/fonts/type1/pu
 blic/amsfonts/cm/cmr7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm
 /cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></u
 sr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on Diskrete_Faltung_Julia.pdf (7 pages, 153966 bytes).
+Output written on Diskrete_Faltung_Julia.pdf (9 pages, 163636 bytes).
 PDF statistics:
- 352 PDF objects out of 1000 (max. 8388607)
- 327 compressed objects within 4 object streams
- 207 named destinations out of 1000 (max. 500000)
+ 409 PDF objects out of 1000 (max. 8388607)
+ 382 compressed objects within 4 object streams
+ 248 named destinations out of 1000 (max. 500000)
  61 words of extra memory for PDF output out of 10000 (max. 10000000)
 
