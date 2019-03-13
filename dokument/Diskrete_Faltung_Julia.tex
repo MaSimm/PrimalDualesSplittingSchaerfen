@@ -195,48 +195,48 @@ end
 
 
 
-%\subsection*{Performance Verbesserungen}
+\subsection*{Performance Verbesserungen}
 
-%Diese Implementierung ist sehr direkt dem Lehrbuch entnommen und noch nicht für die Performance eines Computers optimiert. Als erstes, kann man "Type Annotations" einführen. Dies sagt der Programmiersrache, welche Datentypen man erwartet und erleichtert das Optimieren und kompilieren dieses Codes:
-%\begin{lstlisting}[language=Julia]
-%function disk_ab_v(u::Array{Float64,2}, k::Int)
-%...
-%function disk_grad(u::Array{Float64,2})
-%...
-%\end{lstlisting}
-%Als nächstes merkt man, dass die Schleifenschritte voneinander unabhängig sind (von u wird nur gelesen und v wird nur beschrieben) und man kann dieser Schleife das Makro @simd vorstellen. Dies kann bei vielen Prozessoren zu schnellerer Ausführung führen. Allerdings kann man das nur bei der innersten Schleife anführen, da eine einfache Instruktion auf verschiedene Daten angewandt werden kann. Um das zu verbessern, kann man die zwei Schleifen zu einer Schleife zusammen fassen. Da ich diesen Algorithmus schon mehrfach getestet habe, kann Julia darauf verzichten sogenannte "BoundsChecks" durchzuführen, mittels des @inbounds Makros. Außerdem kann mittels des @fastmath Makros auf EEE754 konforme Arithmetik verzichtet werden und die Performance gesteigert werden:
-%\begin{lstlisting}[language=Julia]
-%M = n*m
-%@simd for a = 0:M-1
-%		j = a % m +1
-%		i = a (ganzzahlige Division) m +1
-%		if i < n
-%			@fastmath @inbounds v[i, j] = (u[i+1, j] - u[i,j])/h
-%		else
-%			@inbounds v[i, j] = 0
-%		end
-%end
-%\end{lstlisting}
-%Da für $k$ nur zwei Fälle möglich sind, kann man die if-else Verzweigung sein lassen und für die beiden vorwärts-Ableitungen eigene Funktionen schreiben.
-%Zuletzt kann noch der Speicher verbessert werden. Bisher wurde bei jedem Aufruf, mittels $v=zeros((n,m))$, neuer Speicher vom Betriebssystem angefordert. Da in der Optimierungsschleife diese Funktion nur jeweils einmal aufgerufen wird und das Ergebnis danach nicht mehr benötigt, kann man ein Array definieren, das man in jedem Schleifendurchlauf neu beschreibt. Dies macht man folgendermaßen:
-%\begin{lstlisting}[language=Julia]
-%function perf_disk_grad(u::Array{Float64,2}, res_arr::Array{Float64,3})
-%	perf_disk_ab_v_1(u,res_arr)
-%	perf_disk_ab_v_2(u,res_arr)
-%end
-%...
-%function perf_disk_ab_v_1(u::Array{Float64,2},v::Array{Float64,3})
-%...
-%	if i < n
-%		@fastmath @inbounds v[i, j, 1] = (u[i+1, j] - u[i,j])/h
-%	else
-%		@inbounds v[i, j, 1] = 0
-%	end
-%...
-%end
-%...
-%\end{lstlisting}
-%hier ist "res arr" ein Array in den Dimensionen der Ausgabe. Das Array wird den Funktionen jeweils übergeben "perf disk ab v 1" beschreibt die Werte $v[i,j,1]$ und "perf disk ab v 2" beschreibt die Werte $v[i,j,2]$.
+Diese Implementierung ist sehr direkt dem Lehrbuch entnommen und noch nicht für die Performance eines Computers optimiert. Als erstes, kann man "Type Annotations" einführen. Dies sagt der Programmiersrache, welche Datentypen man erwartet und erleichtert das Optimieren und kompilieren dieses Codes:
+\begin{lstlisting}[language=Julia]
+function disk_ab_v(u::Array{Float64,2}, k::Int)
+...
+function disk_grad(u::Array{Float64,2})
+...
+\end{lstlisting}
+Als nächstes merkt man, dass die Schleifenschritte voneinander unabhängig sind (von u wird nur gelesen und v wird nur beschrieben) und man kann dieser Schleife das Makro @simd vorstellen. Dies kann bei vielen Prozessoren zu schnellerer Ausführung führen. Allerdings kann man das nur bei der innersten Schleife anführen, da eine einfache Instruktion auf verschiedene Daten angewandt werden kann. Um das zu verbessern, kann man die zwei Schleifen zu einer Schleife zusammen fassen. Da ich diesen Algorithmus schon mehrfach getestet habe, kann Julia darauf verzichten sogenannte "BoundsChecks" durchzuführen, mittels des @inbounds Makros.
+\begin{lstlisting}[language=Julia]
+M = n*m
+@simd for a = 0:M-1
+		j = a % m +1
+		i = a (ganzzahlige Division) m +1
+		if i < n
+			@inbounds v[i, j] = (u[i+1, j] - u[i,j])/h
+		else
+			@inbounds v[i, j] = 0
+		end
+end
+\end{lstlisting}
+Da für $k$ nur zwei Fälle möglich sind, kann man die if-else Verzweigung sein lassen und für die beiden vorwärts-Ableitungen eigene Funktionen schreiben.
+Zuletzt kann noch der Speicher verbessert werden. Bisher wurde bei jedem Aufruf, mittels $v=zeros((n,m))$, neuer Speicher vom Betriebssystem angefordert. Da in der Optimierungsschleife diese Funktion nur jeweils einmal aufgerufen wird und das Ergebnis danach nicht mehr benötigt, kann man ein Array definieren, das man in jedem Schleifendurchlauf neu beschreibt. Dies macht man folgendermaßen:
+\begin{lstlisting}[language=Julia]
+function perf_disk_grad(u::Array{Float64,2}, res_arr::Array{Float64,3})
+	perf_disk_ab_v_1(u,res_arr)
+	perf_disk_ab_v_2(u,res_arr)
+end
+...
+function perf_disk_ab_v_1(u::Array{Float64,2},v::Array{Float64,3})
+...
+	if i < n
+		@inbounds v[i, j, 1] = (u[i+1, j] - u[i,j])/h
+	else
+		@inbounds v[i, j, 1] = 0
+	end
+...
+end
+...
+\end{lstlisting}
+hier ist "res arr" ein Array in den Dimensionen der Ausgabe. Das Array wird den Funktionen jeweils übergeben "perf disk ab v 1" beschreibt die Werte $v[i,j,1]$ und "perf disk ab v 2" beschreibt die Werte $v[i,j,2]$.
 
 
 \subsection{Die diskrete Divergenz}
@@ -285,8 +285,8 @@ end
 \end{lstlisting}
 
 
-%\subsection*{Performance Verbesserungen}
-%Auch hier ist das nur eine simple Übertragung in Julia. Wie in den vorherigen Verbesserungen kann man mittels fastmath, inbounds und simd Makros die %Performance verbessern. Die Verbesserung der Speichernutzung funktioniert hier allerdings etwas anders.
+\subsection*{Performance Verbesserungen}
+Auch hier ist das nur eine simple Übertragung in Julia. Wie in den vorherigen Verbesserungen kann man mittels inbounds und simd Makros die Performance verbessern. Die Verbesserung der Speichernutzung funktioniert hier allerdings etwas anders.
 
 
 \subsection{Die diskrete Faltung}
